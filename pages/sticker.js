@@ -8,8 +8,27 @@ Like a word processor, break the line by replacing the last space in a line with
 wordwrap("This is some kind of a longlonglonglong text", 10) = "This is\nsome kind\nof a\nlonglonglo\nnglong\ntext"
 */
 
-export function wordwrap(text, width) {
-  return text;
+export function wordwrap(text, width, result = "") {
+  if (width <= 0) throw Error("illegal negative width");
+
+  if (text === null || text === "") return result;
+
+  let r = result === "" ? "" : result + "\n";
+  if (text.length <= width) return wordwrap("", width, r + text);
+
+  let lastSpaceIndex = text.lastIndexOf(" ", width);
+  if (lastSpaceIndex >= 0) {
+    return wordwrap(
+      text.substring(lastSpaceIndex).trim(),
+      width,
+      r + text.substring(0, lastSpaceIndex).trim()
+    );
+  } else
+    return wordwrap(
+      text.substring(width).trim(),
+      width,
+      r + text.substring(0, width).trim()
+    );
 }
 
 export default function Sticker() {
